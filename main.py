@@ -1,15 +1,15 @@
 from flask import Flask, render_template, request, redirect
-from website.views import views
+#from website.views import views
 from website import create_app
 
 
 
 app = Flask(__name__)
-app.register_blueprint(views, url_prefix='/')
+#app.register_blueprint(views, url_prefix='/')
 
-
+@app.route('/')
 def main_page():
-    return render_template("home.html")
+    return render_template("website/template/home.html")
 
 
 '''
