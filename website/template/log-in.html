@@ -1,0 +1,50 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>VotePoll</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  
+    <!-------- Bootstrap CSS -------->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  
+    <!------------Bootstrap Scripts---------->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+      
+    <script src="script.js"></script>
+  </head>
+  
+  <body>
+    <div>
+      
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+        <a class='navbar-brand' id='title' href='home.html'>
+          <img scr='\\DMHSC-FS1\Home$\StudentHome\1722\AhmedAden\AhmedAden Bayt\NEA\OVS Logo.jpg' alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+          OVS</a>
+        <ul class='nav nav-tabs'>
+          <li class='nav-item'>
+            <a class='nav-link active' aria-current="page" href='register.html'>Register</a>
+          </li>
+        </ul>
+        </div>
+      </nav>
+    </div>
+      
+        
+    <div class="form-floating mb-3">
+      
+      <input type='email' class="form-control" id="floatingInput" placeholder="name@example.com">
+      <label for='floatingInput'>donald@trump.com</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control" id="floatingInput" placeholder="Password">  
+      <label for="floatingInput">Password</label>
+    </div>
+  
+  
+     <buttton class="btn btn-outline-success" type="submit" onclick="login()">Submit</buttton>   
+      </form>
+  </body>
+  </html>
+  <!--<p><a href="{{url_for('views.signup')}}">Dont have an account? Sign Up</a></p>-->
