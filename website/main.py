@@ -6,18 +6,28 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import User
+from views import views
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
 app = create_app()
 app = Flask(__name__)
-#app.register_blueprint(views, url_prefix='/')
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+app.register_blueprint(views, url_prefix='/')
 
 @app.route('/')
 def main_page():
-    return render_template("home.html")
-    #render_template(url_for('views.home'))
+    #return render_template("home.html")
+    render_template(url_for('views.home'))
+
+@app.route('/vote')
+def vote():
+    return render_template("vote.html")
+
+
 
 
 if __name__ == '__main__':
