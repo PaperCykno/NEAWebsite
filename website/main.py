@@ -17,7 +17,7 @@ app = Flask(__name__)
 #app.register_blueprint(views, url_prefix='/')
 
 @app.route('/')
-def main_page():
+def home():
     return render_template("home.html")
     #render_template(url_for('views.home'))
 
@@ -33,8 +33,15 @@ def form():
 def poll():
     return render_template("poll.html")
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    print(request.form)
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
