@@ -1,8 +1,10 @@
-from .__init__ import db
-from flask import Blueprint, render_template, request, url_for, redirect
-from .models import User
+from __init__ import db
+from flask import Blueprint, render_template, request, url_for, redirect, flash
+from models import User
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 auth = Blueprint('auth', __name__)
 
@@ -26,13 +28,12 @@ def signup():
         email = request.form.get('email')
         password = request.form.get('password')
         if not email or not password:
-            return render_template("home.html", error="Please fill in all the fields")
-
-
-        user = User(email=email, password=generate_password_hash(
+            flash('Email already exist')
+        else:
+            user = User(email=email, password=generate_password_hash(
             password, method='sha256'))
-        db.session.add(user)
-        db.session.commit()
-        login_user(user, remember=True)
-        return redirect('/home')
-    return render_template("home.html")
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=True)
+            return redirect(url_for("views.home"))
+    return render_template()
