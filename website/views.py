@@ -8,14 +8,24 @@ views = Blueprint('views', __name__)
     #return render_template("register.html")
 
 @views.route('/', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def home():
     return render_template("home.html")
 
+@views.route('/poll', methods=['GET', 'POST'])
+#@login_required
+def poll():
+    return render_template("poll.html")
+
 @views.route('/form', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def form():
     return render_template("form.html")
+
+@views.route('/vote', methods=['GET', 'POST'])
+@login_required
+def vote():
+    return render_template("vote.html")
 
 #@views.route('/login', methods=['GET', 'POST'])
 #def login():
