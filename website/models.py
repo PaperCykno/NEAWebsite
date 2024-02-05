@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question_text = db.Column(db.String(200), nullable=False)
-    pub_date = db.Column(db.DateTime, nullable=False)
+    #pub_date = db.Column(db.DateTime, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     FormCreate_id = db.Column(db.Integer, db.ForeignKey('form_create.id'), nullable=False)
 
@@ -35,8 +35,8 @@ class Choice(db.Model):
 
 class FormCreate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    form_name = db.Column(db.String(200), nullable=False)
-    form_description = db.Column(db.String(200), nullable=False)
+    formName = db.Column(db.String(200), nullable=False)
+    formDescription = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
