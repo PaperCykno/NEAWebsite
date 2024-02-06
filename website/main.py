@@ -21,11 +21,14 @@ def home():
     if request.method == "POST":
         form_Name = request.form.get('formName')
         form_Description = request.form.get('dsc')
-        forms = FormCreate(formName=form_Name, formDescription=form_Description, id=current_user.id)
-        db.session.add(forms)
-        db.session.commit()
-        print(request.form)
-        return redirect(url_for("form"))
+        if FormCreate.query.filter_by(id=current_user.id, form_Name=form_Name).first():
+            flash('Form Name already exist', category='error')
+        else:
+            forms = FormCreate(formName=form_Name, formDescription=form_Description, id=current_user.id)
+            db.session.add(forms)
+            db.session.commit()
+            print(request.form)
+            return redirect(url_for("form"))
     return render_template("home.html")
 
 @app.route('/vote')
@@ -71,10 +74,9 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 login_user(user, remember=True)
-                flash('Logged in Successfully', category='error')
-                #return redirect(url_for("home"))
+                return redirect(url_for("home"))
             else:
-                flash('Incorrect Password', catagory='error')
+                flash('Incorrect Password', category='error')
         else:
             flash('Email Does not Exist', category='error')
     return render_template("log-in.html", user=current_user)
@@ -104,4 +106,4 @@ def register():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5002)

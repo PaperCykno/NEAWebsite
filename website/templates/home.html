@@ -129,6 +129,18 @@
     <form class="form-container"  method="POST">
       <h1>Create Form</h1>
 
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      
+        {% for category, message in messages %}
+        <div class="alert alert-danger alert-dismissable fade show" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+      
+      {% endif %}
+      {% endwith %}
+
       <label for="formname"><b>Form Name</b></label>
       <input type="text" placeholder="Enter Form Name" name="formName" required>
 
@@ -138,21 +150,6 @@
       <input type="submit" value="Create" />
       <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
     </form>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      
-        {% for category, message in messages %}
-        <div class="alert alert-danger alert-dismissable fade show" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        {% endfor %}
-      
-    {% endif %}
-    {% endwith %}
 
   </div>
 
