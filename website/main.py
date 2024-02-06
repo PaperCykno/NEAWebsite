@@ -16,12 +16,13 @@ app = create_app()
 
 
 @app.route('/', methods=["GET","POST"])
+@login_required
 def home():
     if request.method == "POST":
         form_Name = request.form.get('formName')
         form_Description = request.form.get('dsc')
-        form = FormCreate(formName=form_Name, dsc=form_Description)
-        db.session.add(form)
+        forms = FormCreate(formName=form_Name, formDescription=form_Description, id=current_user.id)
+        db.session.add(forms)
         db.session.commit()
         print(request.form)
         return redirect(url_for("form"))
@@ -70,11 +71,12 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 login_user(user, remember=True)
-                return redirect(url_for('home'))
+                flash('Logged in Successfully', category='error')
+                #return redirect(url_for("home"))
             else:
-                flash("Incorrect Password", )
+                flash('Incorrect Password', catagory='error')
         else:
-            flash("Email Doesn't Exist")
+            flash('Email Does not Exist', category='error')
     return render_template("log-in.html", user=current_user)
 
 
@@ -86,7 +88,7 @@ def register():
         password = request.form.get('password')
         #if not email or not password:
         if User.query.filter_by(email=email).first():
-            flash('Email already exist', category="error")
+            flash('Email already exist', category='error')
         else:
             user = User(
                 email=email,

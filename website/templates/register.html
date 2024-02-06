@@ -16,8 +16,21 @@
   </head>
 
   <body>
-    <div class="p-3 mb-2 bg-dark-subtle text-emphasis-dark">
+  <div class="p-3 mb-2 bg-dark-subtle text-emphasis-dark">
     <h1 class="text-center">Registration Form</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      
+        {% for category, message in messages %}
+        <div class="alert alert-danger" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+      
+    {% endif %}
+    {% endwith %}
+
     <p>Please fill out this form with the required information:</p>
     <form method="POST">
       <div class="form-floating mb-3">

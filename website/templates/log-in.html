@@ -30,21 +30,36 @@
         </div>
       </nav>
     </div>
-      
-  <form method="POST">    
-    <div class="form-floating mb-3">
-      
-      <input type='email' class="form-control" id="floatingEmail" name="email" placeholder="name@example.com">
-      <label for='floatingInput'>donald@trump.com</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">  
-      <label for="floatingInput">Password</label>
-    </div>
+  <div class="p-3 mb-2 bg-dark-subtle text-emphasis-dark">
+    <h1 class="text-center">Log In</h1>
 
-    <br />
-    <buttton class="btn btn-outline-success" type="submit">Submit</buttton>   
-  </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      
+        {% for category, message in messages %}
+        <div class="alert alert-danger" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+      
+    {% endif %}
+    {% endwith %}
+    
+    <form method="POST">    
+      <div class="form-floating mb-3">
+      
+        <input type='email' class="form-control" id="floatingEmail" name="email" placeholder="name@example.com">
+        <label for='floatingInput'>donald@trump.com</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">  
+        <label for="floatingInput">Password</label>
+      </div>
+
+      <br />
+      <input value="Log-in" type = submit /> 
+    </form>
+  </div>
 </body>
 </html>
   
