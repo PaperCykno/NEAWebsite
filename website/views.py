@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect
 from flask_login import login_required, login_user
-
+'''
 views = Blueprint('views', __name__)
 
 #@views.route('/register', methods=['GET', 'POST'])
@@ -31,3 +31,4 @@ def vote():
 #def login():
     #return render_template("log-in.html")
 
+'''

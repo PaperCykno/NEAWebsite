@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from views import views
+#from views import views
 from __init__ import create_app, db
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
@@ -19,17 +19,26 @@ app = create_app()
 @login_required
 def home():
     if request.method == "POST":
+        
         form_Name = request.form.get('formName')
         form_Description = request.form.get('dsc')
+        
+        print(f"Form name: {form_Name}\nForm Description: {form_Description}")
+
+
+        
         if FormCreate.query.filter_by(id=current_user.id, form_Name=form_Name).first():
             flash('Form Name already exist', category='error')
         else:
-            forms = FormCreate(formName=form_Name, formDescription=form_Description, id=current_user.id)
+            forms = FormCreate(form_Name=form_Name, form_Description=form_Description, id=current_user.id)
             db.session.add(forms)
             db.session.commit()
             print(request.form)
             return redirect(url_for("form"))
+
+        
     return render_template("home.html")
+
 
 @app.route('/vote')
 def vote():
@@ -41,7 +50,7 @@ def form():
         question = request.form.get("question")
         choices = request.form.getlist("option")
 
-        poll = Question(question=question)
+        poll = Question(question=question, user_id=current_user.id)
 
         db.session.add(poll)
         db.session.commit()
@@ -50,7 +59,7 @@ def form():
             newOption = Choice(choice_text=option, question_id=poll.id)
             db.session.add(newOption)
             db.session.commit()
-        return render_template("home.html")
+        return render_template(url_for("poll"))
     return render_template("form.html")
 
 @app.route('/poll')

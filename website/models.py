@@ -35,9 +35,9 @@ class Choice(db.Model):
 
 class FormCreate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    formName = db.Column(db.String(200), nullable=False)
-    formDescription = db.Column(db.String(200), nullable=False)
-    date_created = db.Column(db.DateTime, nullable=False)
+    form_Name = db.Column(db.String(200), nullable=False)
+    form_Description = db.Column(db.String(200), nullable=False)
+    #date_created = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
         return '<FormCreate %r>' % self.form_name

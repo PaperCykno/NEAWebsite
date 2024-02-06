@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poll Builder</title>
     <link rel="stylesheet" href="style.css">
+    <script type = "text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
 
 <div class="poll-container">
     <div id="question-container">
+        <form method="POST">
         <div class="poll-question">
             <label for="question">Poll Question:</label>
             
@@ -31,11 +33,12 @@
             </div>
             <button onclick="addOption()">Add Option</button>
             <button onclick="addQuestion()">Add Question</button>
+            <input type="submit" value ="Save">
         </div>
+        </form>
     </div>
 
     <div class="poll-button">
-        <input type="submit" value="Save Poll" />
         <button onclick="buildPoll()">Build Poll</button>
     </div>
 
