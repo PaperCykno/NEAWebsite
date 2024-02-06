@@ -8,23 +8,23 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, Question, Choice, FormCreate
 
 
-db = SQLAlchemy()
-DB_NAME = "database.db"
+#db = SQLAlchemy()
+#DB_NAME = "database.db"
 
 app = create_app()
-app = Flask(__name__)
+#app = Flask(__name__)
 
-#app.register_blueprint(views, url_prefix='/')
 
 @app.route('/', methods=["GET","POST"])
 def home():
     if request.method == "POST":
         form_Name = request.form.get('formName')
-        form_Description = request.form.get('formDescription')
-        form = FormCreate(formName=form_Name, formDescription=form_Description)
+        form_Description = request.form.get('dsc')
+        form = FormCreate(formName=form_Name, dsc=form_Description)
         db.session.add(form)
         db.session.commit()
-        return redirect(form.html)
+        print(request.form)
+        return redirect(url_for("form"))
     return render_template("home.html")
 
 @app.route('/vote')
@@ -72,7 +72,7 @@ def login():
                 login_user(user, remember=True)
                 return redirect(url_for('home'))
             else:
-                flash("Incorrect Password")
+                flash("Incorrect Password", )
         else:
             flash("Email Doesn't Exist")
     return render_template("log-in.html", user=current_user)
@@ -84,24 +84,22 @@ def register():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        if not email or not password:
-            flash('Email already exist')
+        #if not email or not password:
+        if User.query.filter_by(email=email).first():
+            flash('Email already exist', category="error")
         else:
             user = User(
                 email=email,
-                password=generate_password_hash(
-                    password,
-                    method='sha256'
-                    )
+                password=generate_password_hash(password, method='pbkdf2:sha1')
                 )
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
             print(request.form)
-            return redirect("log-in.html")
+            return redirect(url_for("login"))
     return render_template("register.html")   
 
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

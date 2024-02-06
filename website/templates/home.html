@@ -126,16 +126,16 @@
   <button class="open-button" onclick="openForm()">Open Form</button>
 
   <div class="form-popup" id="myForm">
-    <form class="form-container">
+    <form class="form-container"  method="POST">
       <h1>Create Form</h1>
 
       <label for="formname"><b>Form Name</b></label>
-      <input type="text" placeholder="Enter Form Name" name="formname" required>
+      <input type="text" placeholder="Enter Form Name" name="formName" required>
 
       <label for="dsc"><b>Description</b></label>
       <input type="text" placeholder="Enter Description" name="dsc" required>
 
-      <button type="submit" class="btn">Create</button>
+      <input type="submit" value="Create" />
       <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
     </form>
   </div>
