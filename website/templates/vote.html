@@ -1,1 +1,37 @@
-<p>hello</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vote</title>
+</head>
+<body>
+    <div id="poll"></div>
+
+    <script>
+        function buildPoll(question_id) {
+      const question = document.getElementById('question').value;
+      const options = document.querySelectorAll('.option-input');
+      const poll = {
+          question: question,
+          options: []
+      };
+    
+      options.forEach(option => {
+          poll.options.push({
+            text: option.value,
+            votes: 0
+          });
+      });
+    
+      document.getElementById('result').innerHTML = `
+          <h3>${poll.question}</h3>
+          <ul>
+              ${poll.options.map(option => `<li><input type="radio" name="pOption">${option.text}</li>`).join('')}
+          </ul>
+          <input type="submit" value="vote">
+      `;
+  }
+        var question_id = "{{ question_id }}"; // Get question_id from Flask
+        buildPoll(question_id); // Call buildPoll() with question_id
+    </script>
+</body>
+</html>

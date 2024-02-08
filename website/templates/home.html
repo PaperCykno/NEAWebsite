@@ -31,7 +31,7 @@
           <a class='nav-link disable' aria-current="page" href='/vote'>Vote</a>
         </li>
         <li class='nav-item'>
-          <a class='nav-link disable' href='/poll'>Poll</a>
+          <a class='nav-link disable' href='/polls'>Poll</a>
         </li>
         
       </ul>
@@ -126,7 +126,7 @@
   <button class="open-button" onclick="openForm()">Open Form</button>
 
   <div class="form-popup" id="myForm">
-    <form class="form-container" action="/" method="post">
+    <form class="form-container" action="/" method="POST">
       <h1>Create Form</h1>
 
       {% with messages = get_flashed_messages(with_categories=true) %}

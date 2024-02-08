@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-#from views import views
 from __init__ import create_app, db
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
@@ -8,12 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, Question, Choice, FormCreate
 
 
-#db = SQLAlchemy()
-#DB_NAME = "database.db"
-
 app = create_app()
-#app = Flask(__name__)
-
 
 @app.route('/', methods=["GET","POST"])
 @login_required
@@ -24,25 +18,18 @@ def home():
         form_Description = request.form.get('dsc')
         
         print(f"Form name: {form_Name}\nForm Description: {form_Description}")
-
-
         
-        if FormCreate.query.filter_by(id=current_user.id, form_Name=form_Name).first():
+        if FormCreate.query.filter_by(user_id=current_user.id, form_Name=form_Name).first():
             flash('Form Name already exist', category='error')
         else:
-            forms = FormCreate(form_Name=form_Name, form_Description=form_Description, id=current_user.id)
+            forms = FormCreate(form_Name=form_Name, form_Description=form_Description, user_id=current_user.id)
             db.session.add(forms)
             db.session.commit()
             print(request.form)
             return redirect(url_for("form"))
 
-        
     return render_template("home.html")
 
-
-@app.route('/vote')
-def vote():
-    return render_template("vote.html")
 
 @app.route('/form', methods=["GET","POST"])
 def form():
@@ -50,31 +37,40 @@ def form():
         question = request.form.get("question")
         choices = request.form.getlist("option")
 
-        poll = Question(question=question, user_id=current_user.id)
+        if question:
+            form_create = FormCreate.query.filter_by(user_id=current_user.id).order_by(FormCreate.id.desc()).first()
+            form_create_id = form_create.id
 
-        db.session.add(poll)
-        db.session.commit()
+            poll = Question(question_text=question, user_id=current_user.id, FormCreate_id=form_create_id)
 
-        for option in choices:
-            newOption = Choice(choice_text=option, question_id=poll.id)
-            db.session.add(newOption)
+            db.session.add(poll)
             db.session.commit()
-        return render_template(url_for("poll"))
+            print(request.form)
+
+            for option in choices:
+                newChoice = Choice(choice_text=option, question_id=poll.id)
+                db.session.add(newChoice)
+                db.session.commit()
+                print(request.form)
+
+        return redirect(url_for("polls"))
     return render_template("form.html")
 
-@app.route('/poll')
-def poll():
-    return render_template("poll.html")
+@app.route('/polls')
+def polls():
+    forms = FormCreate.query.filter_by(user_id=current_user.id).all()
+    return render_template('polls.html', form_info = forms)
+    
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect("log-in.html")
+    return redirect(url_for("login"))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print(request.form)
+    #print(request.form)
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -113,6 +109,27 @@ def register():
     return render_template("register.html")   
 
 
+#new routes for voting
+@app.route('/polls/<int:question_id>', methods=['GET', 'POST'])
+def detail(question_id):
+    question = Question.query.get(question_id)
+    if request.method == 'POST':
+        choice_id = request.form['choice']
+        choice = Choice.query.get(choice_id)
+        choice.votes += 1
+        db.session.commit()
+        return redirect(url_for('results', question_id=question.id))
+    return render_template('detail.html', question=question)
+
+@app.route('/polls/<int:question_id>/results')
+def results(question_id):
+    question = Question.query.get(question_id)
+    return render_template('results.html', question=question)
+
+
+@app.route('/vote')
+def vote():
+    return render_template('vote.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5002)

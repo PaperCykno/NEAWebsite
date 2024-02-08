@@ -37,6 +37,7 @@ class FormCreate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     form_Name = db.Column(db.String(200), nullable=False)
     form_Description = db.Column(db.String(200), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     #date_created = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
