@@ -28,10 +28,11 @@ def home():
             print(request.form)
             return redirect(url_for("form"))
 
-    return render_template("home.html")
+    return render_template("home.html", user=current_user)
 
 
 @app.route('/form', methods=["GET","POST"])
+@login_required
 def form():
     if request.method == "POST":
         question = request.form.get("question")
@@ -57,13 +58,13 @@ def form():
     return render_template("form.html")
 
 @app.route('/polls')
+@login_required
 def polls():
     forms = FormCreate.query.filter_by(user_id=current_user.id).all()
     return render_template('polls.html', form_info = forms)
     
 
 @app.route('/logout')
-@login_required
 def logout():
     logout_user()
     return redirect(url_for("login"))
@@ -80,6 +81,7 @@ def login():
             if check_password_hash(user.password, password):
                 login_user(user, remember=True)
                 return redirect(url_for("home"))
+                #flash('Logged in successfully!', category='success')
             else:
                 flash('Incorrect Password', category='error')
         else:
@@ -95,7 +97,7 @@ def register():
         password = request.form.get('password')
         #if not email or not password:
         if User.query.filter_by(email=email).first():
-            flash('Email already exist', category='error')
+            flash('Email already exists', category='error')
         else:
             user = User(
                 email=email,
@@ -105,12 +107,14 @@ def register():
             db.session.commit()
             login_user(user, remember=True)
             print(request.form)
-            return redirect(url_for("login"))
+            flash('Account Created!', category='success')
+            #return redirect(url_for("login"))
     return render_template("register.html")   
 
 
 #new routes for voting
 @app.route('/polls/<int:question_id>', methods=['GET', 'POST'])
+@login_required
 def detail(question_id):
     question = Question.query.get(question_id)
     if request.method == 'POST':
@@ -122,12 +126,14 @@ def detail(question_id):
     return render_template('detail.html', question=question)
 
 @app.route('/polls/<int:question_id>/results')
+@login_required
 def results(question_id):
     question = Question.query.get(question_id)
     return render_template('results.html', question=question)
 
 
 @app.route('/vote')
+@login_required
 def vote():
     return render_template('vote.html')
 

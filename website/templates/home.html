@@ -24,27 +24,32 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
       <a class='navbar-brand' id='title' href='/'>
-        <img scr='\\DMHSC-FS1\Home$\StudentHome\1722\AhmedAden\AhmedAden Bayt\NEA\OVS Logo.jpg' alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-        OVS</a>
+        <img scr='\\DMHSC-FS1\Home$\StudentHome\1722\AhmedAden\AhmedAden Bayt\NEA\OVS Logo.jpg' alt="Logo" width="30" height="24"
+         class="d-inline-block align-text-top">OVS</a>
+      {% if user.is_authenticated %}
       <ul class='nav nav-tabs'>
         <li class='nav-item'>
-          <a class='nav-link disable' aria-current="page" href='/vote'>Vote</a>
+          <a class='nav-link active' aria-current="page" href='/vote'>Vote</a>
         </li>
         <li class='nav-item'>
-          <a class='nav-link disable' href='/polls'>Poll</a>
+          <a class='nav-link active' href='/polls'>Poll</a>
         </li>
         
       </ul>
 
       <ul class='nav nav-tabs'>
+        <li class='nav-item'>
+          <a class='nav-link active' href='/logout'>Log-out</a>
+        </li>
+        {% else %}
         <li class="nav-item">
           <a class='nav-link active' href="/login">Log-in</a>
-
         </li>
         <li class="nav-item">
           <a class="nav-link active" href='/register'>Register</a>
         </li>
       </ul>
+      {% endif %}
       </div>
     </nav>
   </div>
@@ -158,9 +163,23 @@
     document.getElementById("myForm").style.display = "block";
   }
 
+  // Define a function named openForm
+function openForm() {
+    // Retrieve the HTML element with the id "myForm" and set its style display property to "block"
+    document.getElementById("myForm").style.display = "block";
+}
+
+
   function closeForm() {
     document.getElementById("myForm").style.display = "none";
   }
+
+  // Define a function named closeForm
+function closeForm() {
+    // Retrieve the HTML element with the id "myForm" and set its style display property to "none"
+    document.getElementById("myForm").style.display = "none";
+}
+
   </script>
 </body>
 

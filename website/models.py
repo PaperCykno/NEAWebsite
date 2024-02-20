@@ -14,12 +14,9 @@ class User(db.Model, UserMixin):
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question_text = db.Column(db.String(200), nullable=False)
-    #pub_date = db.Column(db.DateTime, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     FormCreate_id = db.Column(db.Integer, db.ForeignKey('form_create.id'), nullable=False)
 
-    def __repr__(self):
-        return '<Question %r>' % self.question_text
 
 
 class Choice(db.Model):
@@ -30,9 +27,6 @@ class Choice(db.Model):
 
     question = db.relationship('Question', backref=db.backref('choices', lazy=True))
 
-    def __repr__(self):
-        return '<Choice %r>' % self.choice_text
-
 class FormCreate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     form_Name = db.Column(db.String(200), nullable=False)
@@ -40,8 +34,7 @@ class FormCreate(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     #date_created = db.Column(db.DateTime, nullable=False)
 
-    def __repr__(self):
-        return '<FormCreate %r>' % self.form_name
+    user = db.relationship('User', backref=db.backref('form_creates', lazy=True))
 
 '''
 class Question( models.Model):
