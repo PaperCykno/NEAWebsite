@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poll Builder</title>
-    <link rel="stylesheet" href="style.css">
-    <script type = "text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
-</head>
-<body>
+{% extends "base.html" %} {% block title %}Form{% endblock %} {% block content%}
 
 <div class="poll-container">
     <div id="question-container">
@@ -104,4 +95,4 @@
   }
   </script>
 </body>
-</html>
+{% endblock %}

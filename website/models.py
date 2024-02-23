@@ -4,10 +4,14 @@ from sqlalchemy.sql import func
 from flask_sqlalchemy import SQLAlchemy
 
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
+    username = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    notifications = db.Column(db.Boolean, default=False)
     question = db.relationship('Question')
 
 
@@ -32,28 +36,6 @@ class FormCreate(db.Model):
     form_Name = db.Column(db.String(200), nullable=False)
     form_Description = db.Column(db.String(200), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    #date_created = db.Column(db.DateTime, nullable=False)
+    #date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 
     user = db.relationship('User', backref=db.backref('form_creates', lazy=True))
-
-'''
-class Question( models.Model):
-  question_text = models.CharField(max_length=200)
-  pub_date = models.DateTimeField('date published')
-
-  def __str__(self):
-    return self.question_text
-
-class Choice( models.Model):
-  question = models.ForeignKey(Question, on_delete=models.CASCADE)
-  choice_text = models.CharField(max_length=200)
-  votes = models.IntegerField(default=0)
-
-  def __str__(self):
-    return self.choice_text
-
-class FormCreate(models.Model):
-  form_name = models.CharField(max_length=200)
-  form_description = models.CharField(max_length=200)
-  date_created = models.DateTimeField('date created')
-'''

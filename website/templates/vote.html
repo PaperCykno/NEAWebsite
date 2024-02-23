@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Vote</title>
-</head>
+{% extends "base.html" %} {% block title %}Vote{% endblock %} {% block content%}
 <body>
     <div id="poll"></div>
 
@@ -34,4 +30,4 @@
         buildPoll(question_id); // Call buildPoll() with question_id
     </script>
 </body>
-</html>
+{% endblock %}
