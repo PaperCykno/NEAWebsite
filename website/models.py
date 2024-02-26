@@ -36,6 +36,6 @@ class FormCreate(db.Model):
     form_Name = db.Column(db.String(200), nullable=False)
     form_Description = db.Column(db.String(200), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    #date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+    date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 
     user = db.relationship('User', backref=db.backref('form_creates', lazy=True))

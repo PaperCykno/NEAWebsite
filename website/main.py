@@ -168,20 +168,28 @@ def profile_change_password():
 def profile_notifications():
     if request.method == 'POST':
         notif_vote= request.form.get('vote_notification')
-        if notif_vote == True:
-            current_user.vote_notification = True
+        if notif_vote == 'on':
+            current_user.notifications = True
             db.session.commit()
             flash('Vote Notification Enabled', category='success')
         else:
-            current_user.vote_notification = False
+            current_user.notifications = False
             db.session.commit()
             flash('Vote Notification Disabled', category='success')
-
     return render_template('profile_notifications.html', user=current_user)
-
-@app.route('/allpollview')
+ 
+@app.route('/allpollview', methods=['GET', 'POST'])
 @login_required
 def allpollview():
+    if request.method == 'POST':
+        searched = request.form.get('searched')
+        print(searched)
+        if searched:
+            search = FormCreate.query.filter(FormCreate.form_Name.contains(searched)).all()
+            return render_template('allpollview.html', polls = search, user=current_user)
+        else:
+            flash('No Polls Found', category='error')
+    
     polls = FormCreate.query.filter_by().all()
     return render_template('allpollview.html', polls = polls, user=current_user)
 
