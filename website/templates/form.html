@@ -2,42 +2,39 @@
 
 <div class="poll-container">
     <div id="question-container">
-        <form method="POST">
+        <form method="POST" onsubmit="handleSubmission(event)">
+        <input type="hidden" name="num_questions" id="num_questions" value="1">
         <div class="poll-question">
             <label for="question">Poll Question:</label>
             
-            <input type="text" id="question" name="question" placeholder="Enter your question">
-            <button onclick="removeQuestion()">Remove Question</button>
+            <input type="text" class="question" name="question1" placeholder="Enter your question"> <button onclick="addQuestion(event)">Add Question</button>
         </div>
 
         <div class="poll-options">
             <label for="options">Poll Options:</label>
-            <div id="options-container">
+            <div class="options-container">
                 <div class="poll-option">
-                    <input type="text" class="option-input"  name="option" placeholder="Option 1">
+                    <input type="text" class="option-input"  name="option1" placeholder="Option 1">
                 </div>
                 <div class="poll-option">
-                    <input type="text" class="option-input"  name="option" placeholder="Option 2">
+                    <input type="text" class="option-input"  name="option1" placeholder="Option 2">
                     <button onclick="removeOption(this)">Remove</button>
                 </div>
             </div>
             
-            <input type="submit" value ="Save">
-            </form>
-            <button onclick="addOption()">Add Option</button>
-            <button onclick="addQuestion()">Add Question</button>
+            
+            <button onclick="addOption(event, this)">Add Option</button>
         </div>
     </div>
+    <input type="submit" value ="Save" id="saveButton">
+    </form>
 
-    <div class="poll-button">
-        <button onclick="buildPoll()">Build Poll</button>
-    </div>
-
-    <div id="result"></div>
 </div>
 
-<script>function addOption() {
-    const optionsContainer = document.getElementById('options-container');
+<script>
+    function addOption(something, button) {
+    something.preventDefault();
+    const optionsContainer = button.parentNode.getElementsByClassName('options-container')[0];
     const option = document.createElement('div');
     option.classList.add('poll-option');
     option.innerHTML = `
@@ -48,24 +45,43 @@
   }
     
   function removeQuestion(button) {
+    event.preventDefault();
+    const numQuestions = document.getElementById('num_questions');
+    numQuestions.value = parseInt(numQuestions.value) - 1;
     const questionsContainer = document.getElementById('question-container');
     questionsContainer.removeChild(button.parentNode);
   }
     
   function removeOption(button) {
-    const optionsContainer = document.getElementById('options-container');
+    event.preventDefault();
+    const optionsContainer = button.parentNode.parentNode;
     optionsContainer.removeChild(button.parentNode);
   }
     
-  function addQuestion() {
+  function addQuestion(something) {
+    something.preventDefault();
+    const numQuestions = document.getElementById('num_questions');
+    numQuestions.value = parseInt(numQuestions.value) + 1;
     const questionContainer = document.getElementById('question-container');
     const questionDiv = document.createElement('div');
     questionDiv.classList.add('poll-question');
     questionDiv.innerHTML = `
         <label for="question">Poll Question:</label>
     
-        <input type="text" id="question" placeholder="Enter your question">
+        <input type="text" class="question" placeholder="Enter your question">
         <button onclick="removeQuestion(this)">Remove Question</button>
+        <div class="poll-options">
+            <label for="options">Poll Options:</label>
+            <div class="options-container">
+                <div class="poll-option">
+                    <input type="text" class="option-input"  name="option" placeholder="Option 1">
+                </div>
+                <div class="poll-option">
+                    <input type="text" class="option-input"  name="option" placeholder="Option 2">
+                    <button onclick="removeOption(this)">Remove</button>
+                </div>
+            </div>
+            <button onclick="addOption(event, this)">Add Option</button>
     `;
     questionContainer.insertBefore(questionDiv, questionContainer.children[1]);
   }
@@ -93,6 +109,13 @@
           <input type="submit" value="vote">
       `;
   }
+  
+  function handleSubmission(event) {
+    if (event.submitter.id !== 'saveButton') {
+        event.preventDefault();
+    }
+    }
+
   </script>
 </body>
 {% endblock %}

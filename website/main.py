@@ -35,24 +35,26 @@ def home():
 @login_required
 def form():
     if request.method == "POST":
-        question = request.form.get("question")
-        choices = request.form.getlist("option")
+        num_questions = int(request.form.get("num_questions"))
 
-        if question:
-            form_create = FormCreate.query.filter_by(user_id=current_user.id).order_by(FormCreate.id.desc()).first()
-            form_create_id = form_create.id
+        for i in range(1, num_questions + 1):
+            question = request.form.get(f"question{i}")
+            options = request.form.getlist(f"option{i}")
 
-            poll = Question(question_text=question, user_id=current_user.id, FormCreate_id=form_create_id)
+            if question:
+                form_create = FormCreate.query.filter_by(user_id=current_user.id).order_by(FormCreate.id.desc()).first()
+                form_create_id = form_create.id
 
-            db.session.add(poll)
-            db.session.commit()
-            print(request.form)
+                poll = Question(question_text=question, user_id=current_user.id, FormCreate_id=form_create_id)
 
-            for option in choices:
-                newChoice = Choice(choice_text=option, question_id=poll.id)
-                db.session.add(newChoice)
+                db.session.add(poll)
                 db.session.commit()
-                print(request.form)
+                #print(request.form)
+
+                for option in options:
+                    newChoice = Choice(choice_text=option, question_id=poll.id)
+                    db.session.add(newChoice)
+                    db.session.commit()
 
         return redirect(url_for("polls"))
     return render_template("form.html", user=current_user)
@@ -115,23 +117,37 @@ def register():
 
 
 #new routes for voting
-@app.route('/polls/<int:question_id>', methods=['GET', 'POST'])
+@app.route('/polls/<int:form_id>', methods=['GET', 'POST'])
 @login_required
-def detail(question_id):
-    question = Question.query.get(question_id)
+def detail(form_id):
+    form = FormCreate.query.get(form_id)
     if request.method == 'POST':
-        choice_id = request.form['choice']
-        choice = Choice.query.get(choice_id)
-        choice.votes += 1
+        for question in form.questions:
+            choice_id = request.form[f'choice_{question.id}']
+            if choice_id:
+                choice = Choice.query.get(choice_id)
+                choice.votes += 1
         db.session.commit()
-        return redirect(url_for('results', question_id=question.id))
-    return render_template('detail.html', question=question, user=current_user)
+        return redirect(url_for('results', form_id=form.id))
+    return render_template('detail.html', form=form, user=current_user)
 
-@app.route('/polls/<int:question_id>/results')
+#@app.route('/polls/<int:question_id>', methods=['GET', 'POST'])
+#@login_required
+#def detail(question_id):
+    #question = Question.query.get(question_id)
+    #if request.method == 'POST':
+        #choice_id = request.form['choice']
+        #choice = Choice.query.get(choice_id)
+        #choice.votes += 1
+        #db.session.commit()
+        #return redirect(url_for('results', question_id=question.id))
+    #return render_template('detail.html', question=question, user=current_user)
+
+@app.route('/polls/<int:form_id>/results')
 @login_required
-def results(question_id):
-    question = Question.query.get(question_id)
-    return render_template('results.html', question=question, user=current_user)
+def results(form_id):
+    form = FormCreate.query.get(form_id)
+    return render_template('results.html', form=form, user=current_user)
 
 
 @app.route('/vote')
